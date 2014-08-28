@@ -5,11 +5,11 @@ create table person (
 );
 
 create table message (
-   id       integer  not null,
-   from_id  integer  not null,
-   to_id    integer,
+   id        integer  not null,
+   from_pid  integer  not null,
+   to_pid    integer,
    content  clob,
    constraint mpk  primary key (id),
-   constraint mfk2 foreign key (from_id) references person (id),
-   constraint mfk1 foreign key (to_id)   references person (id)
+   constraint mfk2 foreign key (from_pid) references person (id),
+   constraint mfk1 foreign key (to_pid)   references person (id)
 );
