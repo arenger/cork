@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-   <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-      <file>conejo.log</file>
-    <layout class="ch.qos.logback.classic.PatternLayout">
-      <Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Pattern>
-    </layout>
+  <appender name="MAIN" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>cork.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+      <fileNamePattern>cork.%i.log</fileNamePattern>
+      <minIndex>1</minIndex>
+      <maxIndex>3</maxIndex>
+    </rollingPolicy>
+    <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+      <maxFileSize>1MB</maxFileSize>
+    </triggeringPolicy>
+    <encoder>
+      <pattern>%d [%thread] %-5level %logger{15} - %msg%n</pattern>
+    </encoder>
   </appender>
-  <logger name="com.example" level="TRACE"/>
-  <root level="debug">
-    <appender-ref ref="FILE" />
+  <root level="DEBUG">
+    <appender-ref ref="MAIN"/>
   </root>
 </configuration>
