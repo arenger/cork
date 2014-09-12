@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.example.dal.DalException;
-import com.example.dal.DefaultPool;
+import com.example.dal.DefaultSource;
 
 public class Initializer implements ServletContextListener {
 
@@ -17,10 +17,10 @@ public class Initializer implements ServletContextListener {
    @Override
    public void contextInitialized(ServletContextEvent event) {
       try {
-         DefaultPool.init();
-         LOG.info("Default pool initialized.");
+         DefaultSource.init();
+         LOG.info("Default DataSource initialized.");
       } catch (DalException e) {
-         LOG.error("Problem initializing default pool", e);
+         LOG.error("Problem initializing default DataSource", e);
       }
    }
 

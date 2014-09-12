@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javax.sql.DataSource;
+
 import com.example.dto.Person;
 
 //TODO modify this example to use spring and hibernate instead
@@ -18,15 +20,15 @@ public class PersonKeeper {
       "select max(id) from person"; // normally an oracle sequence,
                                     // but for simplicity...
 
-   private ConnectionProvider pool;
+   private DataSource ds;
    private static Integer nextId = null;
 
    public PersonKeeper() {
-      pool = DefaultPool.getInstance();
+      ds = DefaultSource.get();
    }
 
-   public PersonKeeper(ConnectionProvider pool) {
-      this.pool = pool;
+   public PersonKeeper(DataSource ds) {
+      this.ds = ds;
    }
 
    private static synchronized int getNextId(Connection conn)
@@ -53,7 +55,7 @@ public class PersonKeeper {
    }
 
    public void add(Person person) throws DalException {
-      try (Connection conn = pool.getConnection();
+      try (Connection conn = ds.getConnection();
            PreparedStatement ps = conn.prepareStatement(INS)) {
          if (person.getId() != null) {
             throw new IllegalArgumentException("person.id should be null");
@@ -68,7 +70,7 @@ public class PersonKeeper {
    }
 
    public void update(Person person) throws DalException {
-      try (Connection conn = pool.getConnection();
+      try (Connection conn = ds.getConnection();
            PreparedStatement ps = conn.prepareStatement(UPD)) {
          ps.setString(1, person.getName());
          ps.setInt(2, person.getId());

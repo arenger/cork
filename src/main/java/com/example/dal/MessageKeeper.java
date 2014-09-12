@@ -8,6 +8,8 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.sql.DataSource;
+
 import com.example.dto.Message;
 
 //TODO modify this example to use spring and hibernate instead
@@ -24,15 +26,15 @@ public class MessageKeeper {
       "select max(id) from message"; // normally an oracle sequence,
                                      // but for simplicity...
 
-   private ConnectionProvider pool;
+   private DataSource ds;
    private static Integer nextId = null;
 
    public MessageKeeper() {
-      pool = DefaultPool.getInstance();
+      ds = DefaultSource.get();
    }
 
-   public MessageKeeper(ConnectionProvider pool) {
-      this.pool = pool;
+   public MessageKeeper(DataSource ds) {
+      this.ds = ds;
    }
 
    private static synchronized int getNextId(Connection conn)
@@ -51,7 +53,7 @@ public class MessageKeeper {
    }
 
    public void add(Message message) throws DalException {
-      try (Connection conn = pool.getConnection();
+      try (Connection conn = ds.getConnection();
            PreparedStatement ps = conn.prepareStatement(INS)) {
          if (message.getId() != null) {
             throw new IllegalArgumentException("message.id should be null");
@@ -86,7 +88,7 @@ public class MessageKeeper {
    private List<Message> getMessagesTF(int personId, String sql)
       throws DalException {
       List<Message> ret = new ArrayList<Message>();
-      try (Connection conn = pool.getConnection();
+      try (Connection conn = ds.getConnection();
            PreparedStatement ps = conn.prepareStatement(sql)) {
          ps.setInt(1, personId);
          ResultSet rs = ps.executeQuery();
