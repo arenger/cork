@@ -11,16 +11,16 @@ import com.example.dal.DalException;
 import com.example.dal.PersonKeeper;
 import com.example.dto.Person;
 
-@Path("/people")
+@Path("/person")
 public class PeopleService {
 
    private static final Logger LOG
       = LoggerFactory.getLogger(PeopleService.class);
 
    @POST
-   @Path("addOrUpdatePerson")
+   @Path("addOrUpdate")
    @Consumes("application/json")
-   public Person addOrUpdatePerson(Person person) {
+   public Person addOrUpdate(Person person) {
       try {
          PersonKeeper pk = new PersonKeeper();
          pk.save(person);

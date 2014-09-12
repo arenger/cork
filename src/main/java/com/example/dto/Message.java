@@ -5,35 +5,35 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "person")
 public class Message {
-   private int    id;
-   private int    fromPersonId;
-   private int    toPersonId;
-   private String content;
+   private Integer id;
+   private Integer fromPersonId;
+   private Integer toPersonId;
+   private String  content;
 
    @XmlElement
-   public int getId() {
+   public Integer getId() {
       return id;
    }
 
-   public void setId(int id) {
+   public void setId(Integer id) {
       this.id = id;
    }
 
    @XmlElement
-   public int getFromPersonId() {
+   public Integer getFromPersonId() {
       return fromPersonId;
    }
 
-   public void setFromPersonId(int fromPersonId) {
+   public void setFromPersonId(Integer fromPersonId) {
       this.fromPersonId = fromPersonId;
    }
 
    @XmlElement
-   public int getToPersonId() {
+   public Integer getToPersonId() {
       return toPersonId;
    }
 
-   public void setToPersonId(int toPersonId) {
+   public void setToPersonId(Integer toPersonId) {
       this.toPersonId = toPersonId;
    }
 
