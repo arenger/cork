@@ -1,6 +1,9 @@
 package com.example.rest;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -39,8 +42,8 @@ public class MessageService {
    @GET
    @Path("getFrom/{personId}")
    @Consumes("text/plain")
-   public List<Message> getFrom(@PathParam("personId") int personId) {
-      List<Message> ret = null;
+   public Set<Message> getFrom(@PathParam("personId") int personId) {
+      Set<Message> ret = null;
       try {
          MessageKeeper mk = new MessageKeeper();
          ret = mk.getMessagesFrom(personId);
@@ -53,8 +56,8 @@ public class MessageService {
    @GET
    @Path("getTo/{personId}")
    @Consumes("text/plain")
-   public List<Message> getTo(@PathParam("personId") int personId) {
-      List<Message> ret = null;
+   public Set<Message> getTo(@PathParam("personId") int personId) {
+      Set<Message> ret = null;
       try {
          MessageKeeper mk = new MessageKeeper();
          ret = mk.getMessagesTo(personId);
@@ -72,7 +75,10 @@ public class MessageService {
       try {
          MessageKeeper mk = new MessageKeeper();
          Digester d = new Digester();
-         md5 = d.getMd5(mk.getMessagesFrom(personId)) + "\n";
+         List<Message> ml = new ArrayList<Message>();
+         ml.addAll(mk.getMessagesFrom(personId));
+         Collections.sort(ml);
+         md5 = d.getMd5(ml) + "\n";
       } catch (DalException e) {
          LOG.error("Problem getting messages from {}", personId, e);
       }

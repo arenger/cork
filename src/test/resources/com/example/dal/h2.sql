@@ -8,6 +8,6 @@ create table message (
    from_pid  int  not null,
    to_pid    int,
    content  clob,
-   (foreign key (from_pid) references person(id),
-   (foreign key (to_pid)   references person(id)
+   foreign key (from_pid) references person(id),
+   foreign key (to_pid)   references person(id)
 );

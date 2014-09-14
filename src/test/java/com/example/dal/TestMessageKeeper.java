@@ -2,13 +2,23 @@ package com.example.dal;
 
 import java.io.InputStreamReader;
 import java.sql.Connection;
+import java.util.Set;
 
 import javax.sql.DataSource;
 
+import org.dbunit.IDatabaseTester;
+import org.dbunit.JdbcDatabaseTester;
+import org.dbunit.dataset.DataSetException;
+import org.dbunit.dataset.IDataSet;
+import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
+import org.dbunit.operation.DatabaseOperation;
 import org.h2.jdbcx.JdbcDataSource;
 import org.h2.tools.RunScript;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import com.example.dto.Message;
 
 public class TestMessageKeeper {
    private static final String JDBC_DRIVER = "org.h2.Driver";
@@ -17,6 +27,7 @@ public class TestMessageKeeper {
    private static final String USER = "sa";
    private static final String PASS = "";
    private static final String SCHEMA_FILE = "h2.sql";
+   private static final String DATASET1    = "set1.xml";
 
    @BeforeClass
    public static void createSchema() throws Exception {
@@ -26,6 +37,17 @@ public class TestMessageKeeper {
             TestMessageKeeper.class.getResourceAsStream(SCHEMA_FILE));
          RunScript.execute(conn, in);
       }
+      load(DATASET1);
+   }
+
+   private static void load(String filename) throws Exception {
+      IDataSet ids = new FlatXmlDataSetBuilder().build(
+         TestMessageKeeper.class.getResourceAsStream(filename));
+      IDatabaseTester databaseTester =
+         new JdbcDatabaseTester(JDBC_DRIVER, JDBC_URL, USER, PASS);
+      databaseTester.setSetUpOperation(DatabaseOperation.CLEAN_INSERT);
+      databaseTester.setDataSet(ids);
+      databaseTester.onSetup();
    }
 
    private static DataSource dataSource() {
@@ -36,6 +58,23 @@ public class TestMessageKeeper {
       return dataSource;
    }
 
-   //@Test
-   //public testGet
+   @Test
+   public void testGetMessagesTo() throws Exception {
+      MessageKeeper mk = new MessageKeeper(dataSource());
+      Set<Message> ms = mk.getMessagesTo(2);
+      Assert.assertEquals("Expected count", 2, ms.size());
+
+      Message m = new Message();
+      m.setId(1);
+      m.setFromPersonId(1);
+      m.setContent("hello world!");
+      Assert.assertTrue("Expecting " + m, ms.contains(m));
+
+      m = new Message();
+      m.setId(2);
+      m.setFromPersonId(1);
+      m.setToPersonId(2);
+      m.setContent("hello!");
+      Assert.assertTrue("Expecting " + m, ms.contains(m));
+   }
 }

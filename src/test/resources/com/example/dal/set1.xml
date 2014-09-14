@@ -1,0 +1,8 @@
+<dataset>
+   <person id="1" name="John"/>
+   <person id="2" name="Harold"/>
+
+   <message id="2" from_pid="1" to_pid="2" content="hello!"/>
+   <message id="3" from_pid="2" to_pid="1" content="hello there."/>
+   <message id="1" from_pid="1" content="hello world!"/>
+</dataset>

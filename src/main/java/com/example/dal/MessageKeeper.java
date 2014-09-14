@@ -5,8 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
+import java.util.HashSet;
 
 import javax.sql.DataSource;
 
@@ -77,17 +77,17 @@ public class MessageKeeper {
       }
    }
 
-   public List<Message> getMessagesTo(int personId) throws DalException {
+   public Set<Message> getMessagesTo(int personId) throws DalException {
       return getMessagesTF(personId, SEL_TPID);
    }
 
-   public List<Message> getMessagesFrom(int personId) throws DalException {
+   public Set<Message> getMessagesFrom(int personId) throws DalException {
       return getMessagesTF(personId, SEL_FPID);
    }
 
-   private List<Message> getMessagesTF(int personId, String sql)
+   private Set<Message> getMessagesTF(int personId, String sql)
       throws DalException {
-      List<Message> ret = new ArrayList<Message>();
+      Set<Message> ret = new HashSet<Message>();
       try (Connection conn = ds.getConnection();
            PreparedStatement ps = conn.prepareStatement(sql)) {
          ps.setInt(1, personId);
