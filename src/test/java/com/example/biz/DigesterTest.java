@@ -14,12 +14,12 @@ public class DigesterTest {
    public void testMd5() {
       List<Message> ml = new ArrayList<Message>();
       Message m = new Message();
-      m.setContent("pJlmkY.btid.");
+      m.setContent("make me a sandwich.");
       ml.add(m);
       m = new Message();
-      m.setContent("pmmabmfah.");
+      m.setContent("sudo make me a sandwich.");
       ml.add(m);
-      Assert.assertEquals("80b05863c6ad3ec1b0ef4bc29ed2a843",
+      Assert.assertEquals("55afdd56f6cc7e6e4f13312eaae9f7dc",
          new Digester().md5(ml));
    }
 }
