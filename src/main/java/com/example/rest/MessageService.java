@@ -25,13 +25,22 @@ public class MessageService {
    private static final Logger LOG
       = LoggerFactory.getLogger(MessageService.class);
 
+   private final MessageKeeper messageKeeper;
+
+   public MessageService() {
+      messageKeeper = new MessageKeeper();
+   }
+
+   public MessageService(MessageKeeper messageKeeper) {
+      this.messageKeeper = messageKeeper;
+   }
+
    @POST
    @Path("add")
    @Consumes("application/json")
    public Message add(Message message) {
       try {
-         MessageKeeper mk = new MessageKeeper();
-         mk.add(message);
+         messageKeeper.add(message);
       } catch (DalException e) {
          LOG.error("Problem adding message", e);
          message = null;
@@ -45,8 +54,7 @@ public class MessageService {
    public Set<Message> getFrom(@PathParam("personId") int personId) {
       Set<Message> ret = null;
       try {
-         MessageKeeper mk = new MessageKeeper();
-         ret = mk.getMessagesFrom(personId);
+         ret = messageKeeper.getMessagesFrom(personId);
       } catch (DalException e) {
          LOG.error("Problem getting messages from {}", personId, e);
       }
@@ -59,8 +67,7 @@ public class MessageService {
    public Set<Message> getTo(@PathParam("personId") int personId) {
       Set<Message> ret = null;
       try {
-         MessageKeeper mk = new MessageKeeper();
-         ret = mk.getMessagesTo(personId);
+         ret = messageKeeper.getMessagesTo(personId);
       } catch (DalException e) {
          LOG.error("Problem getting messages from {}", personId, e);
       }
@@ -73,12 +80,11 @@ public class MessageService {
    public String md5from(@PathParam("personId") int personId) {
       String md5 = null;
       try {
-         MessageKeeper mk = new MessageKeeper();
          Digester d = new Digester();
          List<Message> ml = new ArrayList<Message>();
-         ml.addAll(mk.getMessagesFrom(personId));
+         ml.addAll(messageKeeper.getMessagesFrom(personId));
          Collections.sort(ml);
-         md5 = d.getMd5(ml) + "\n";
+         md5 = d.md5(ml) + "\n";
       } catch (DalException e) {
          LOG.error("Problem getting messages from {}", personId, e);
       }

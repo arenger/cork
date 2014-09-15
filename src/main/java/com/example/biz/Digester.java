@@ -14,7 +14,7 @@ public class Digester {
    private static final Logger LOG
       = LoggerFactory.getLogger(Digester.class);
 
-   public String getMd5(List<Message> messages) {
+   public String md5(List<Message> messages) {
       if ((messages == null) || (messages.size() == 0)) {
          return "";
       }
