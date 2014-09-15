@@ -8,7 +8,6 @@ import javax.sql.DataSource;
 
 import org.dbunit.IDatabaseTester;
 import org.dbunit.JdbcDatabaseTester;
-import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.operation.DatabaseOperation;
@@ -20,7 +19,7 @@ import org.junit.Test;
 
 import com.example.dto.Message;
 
-public class TestMessageKeeper {
+public class MessageKeeperTest {
    private static final String JDBC_DRIVER = "org.h2.Driver";
    private static final String JDBC_URL    =
       "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1";
@@ -34,7 +33,7 @@ public class TestMessageKeeper {
       Class.forName(JDBC_DRIVER);
       try (Connection conn = dataSource().getConnection()) {
          InputStreamReader in = new InputStreamReader(
-            TestMessageKeeper.class.getResourceAsStream(SCHEMA_FILE));
+            MessageKeeperTest.class.getResourceAsStream(SCHEMA_FILE));
          RunScript.execute(conn, in);
       }
       load(DATASET1);
@@ -42,7 +41,7 @@ public class TestMessageKeeper {
 
    private static void load(String filename) throws Exception {
       IDataSet ids = new FlatXmlDataSetBuilder().build(
-         TestMessageKeeper.class.getResourceAsStream(filename));
+         MessageKeeperTest.class.getResourceAsStream(filename));
       IDatabaseTester databaseTester =
          new JdbcDatabaseTester(JDBC_DRIVER, JDBC_URL, USER, PASS);
       databaseTester.setSetUpOperation(DatabaseOperation.CLEAN_INSERT);

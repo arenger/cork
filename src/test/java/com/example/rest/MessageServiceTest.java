@@ -13,7 +13,7 @@ import com.example.dto.Message;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class TestMessageService {
+public class MessageServiceTest {
 
    @Test
    public void testMd5from() throws DalException {

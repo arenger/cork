@@ -8,7 +8,7 @@ import org.junit.Test;
 
 import com.example.dto.Message;
 
-public class TestDigester {
+public class DigesterTest {
 
    @Test
    public void testMd5() {
