@@ -36,7 +36,6 @@ public class MessageKeeperTest {
            MessageKeeperTest.class.getResourceAsStream(SCHEMA_FILE))) {
          RunScript.execute(conn, in);
       }
-      load(DATASET1);
    }
 
    private static void load(String filename) throws Exception {
@@ -59,6 +58,7 @@ public class MessageKeeperTest {
 
    @Test
    public void testGetMessagesTo() throws Exception {
+      load(DATASET1);
       MessageKeeper mk = new MessageKeeper(dataSource());
       Set<Message> ms = mk.getMessagesTo(2);
       Assert.assertEquals("Expected count", 2, ms.size());
