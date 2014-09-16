@@ -14,6 +14,7 @@ import org.dbunit.operation.DatabaseOperation;
 import org.h2.jdbcx.JdbcDataSource;
 import org.h2.tools.RunScript;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -38,9 +39,10 @@ public class MessageKeeperTest {
       }
    }
 
-   private static void load(String filename) throws Exception {
+   @Before
+   public void loadTestData() throws Exception {
       IDataSet ids = new FlatXmlDataSetBuilder().build(
-         MessageKeeperTest.class.getResourceAsStream(filename));
+         MessageKeeperTest.class.getResourceAsStream(DATASET1));
       IDatabaseTester databaseTester =
          new JdbcDatabaseTester(JDBC_DRIVER, JDBC_URL, USER, PASS);
       databaseTester.setSetUpOperation(DatabaseOperation.CLEAN_INSERT);
@@ -58,7 +60,6 @@ public class MessageKeeperTest {
 
    @Test
    public void testGetMessagesTo() throws Exception {
-      load(DATASET1);
       MessageKeeper mk = new MessageKeeper(dataSource());
       Set<Message> ms = mk.getMessagesTo(2);
       Assert.assertEquals("Expected count", 2, ms.size());
