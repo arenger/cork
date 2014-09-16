@@ -31,9 +31,9 @@ public class MessageKeeperTest {
    @BeforeClass
    public static void createSchema() throws Exception {
       Class.forName(JDBC_DRIVER);
-      try (Connection conn = dataSource().getConnection()) {
-         InputStreamReader in = new InputStreamReader(
-            MessageKeeperTest.class.getResourceAsStream(SCHEMA_FILE));
+      try (Connection conn = dataSource().getConnection();
+           InputStreamReader in = new InputStreamReader(
+           MessageKeeperTest.class.getResourceAsStream(SCHEMA_FILE))) {
          RunScript.execute(conn, in);
       }
       load(DATASET1);
