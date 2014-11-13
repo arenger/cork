@@ -1,4 +1,4 @@
-## DbUnit Research ##
+## DbUnit Example ##
 
 The goal of this project is to provide an example of how and where to use [DbUnit](http://dbunit.sourceforge.net/) in conjunction with an in-memory [H2 database](http://www.h2database.com/).
 
