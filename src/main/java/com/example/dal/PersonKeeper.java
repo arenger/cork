@@ -1,82 +1,31 @@
 package com.example.dal;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
-import javax.sql.DataSource;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 
 import com.example.dto.Person;
 
-//TODO modify this example to use spring and hibernate instead
-
 public class PersonKeeper {
-   private static final String INS =
-      "insert into person (id, name) values (?, ?)";
-   private static final String UPD =
-      "update person set name = ? where id = ?";
-   private static final String MAXID =
-      "select max(id) from person"; // normally an oracle sequence,
-                                    // but for simplicity...
-
-   private DataSource ds;
-   private static Integer nextId = null;
-
-   public PersonKeeper() {
-      ds = DefaultSource.get();
-   }
-
-   public PersonKeeper(DataSource ds) {
-      this.ds = ds;
-   }
-
-   private static synchronized int getNextId(Connection conn)
-      throws SQLException {
-      if (nextId == null) {
-         try (PreparedStatement ps = conn.prepareStatement(MAXID)) {
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-               nextId = rs.getInt(1) + 1;
-            } else {
-               nextId = 1;
-            }
-         }
-      }
-      return nextId++;
-   }
 
    public void save(Person person) throws DalException {
-      if (person.getId() == null) {
-         add(person);
-      } else {
-         update(person);
-      }
-   }
-
-   public void add(Person person) throws DalException {
-      try (Connection conn = ds.getConnection();
-           PreparedStatement ps = conn.prepareStatement(INS)) {
-         if (person.getId() != null) {
-            throw new IllegalArgumentException("person.id should be null");
+      EntityManager     mgr = null;
+      EntityTransaction tx  = null;
+      try {
+         mgr = Manager.createEntityManager();
+         tx = mgr.getTransaction();
+         tx.begin();
+         mgr.persist(person);
+         tx.commit();
+      } catch (Exception e) {
+         if ((tx != null) && (tx.isActive())) {
+            tx.rollback();
          }
-         person.setId(getNextId(conn));
-         ps.setInt(1, person.getId());
-         ps.setString(2, person.getName());
-         ps.executeUpdate();
-      } catch (SQLException e) {
          throw new DalException(e);
+      } finally {
+         if ((mgr != null) && mgr.isOpen()) {
+            mgr.close();
+         }
       }
    }
 
-   public void update(Person person) throws DalException {
-      try (Connection conn = ds.getConnection();
-           PreparedStatement ps = conn.prepareStatement(UPD)) {
-         ps.setString(1, person.getName());
-         ps.setInt(2, person.getId());
-         ps.executeUpdate();
-      } catch (SQLException e) {
-         throw new DalException(e);
-      }
-   }
 }

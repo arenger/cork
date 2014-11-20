@@ -1,5 +1,11 @@
 package com.example.dto;
 
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -8,6 +14,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
+@Entity
 @XmlRootElement(name = "person")
 public class Message implements Comparable<Message> {
    private Integer id;
@@ -15,6 +22,8 @@ public class Message implements Comparable<Message> {
    private Integer toPersonId;
    private String  content;
 
+   @Id
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
    @XmlElement
    public Integer getId() {
       return id;
@@ -24,6 +33,8 @@ public class Message implements Comparable<Message> {
       this.id = id;
    }
 
+   @Basic
+   @Column(name = "from_pid")
    @XmlElement
    public Integer getFromPersonId() {
       return fromPersonId;
@@ -33,6 +44,8 @@ public class Message implements Comparable<Message> {
       this.fromPersonId = fromPersonId;
    }
 
+   @Basic
+   @Column(name = "to_pid")
    @XmlElement
    public Integer getToPersonId() {
       return toPersonId;
@@ -42,6 +55,7 @@ public class Message implements Comparable<Message> {
       this.toPersonId = toPersonId;
    }
 
+   @Basic
    @XmlElement
    public String getContent() {
       return content;

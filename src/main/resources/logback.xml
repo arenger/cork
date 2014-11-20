@@ -14,7 +14,8 @@
       <pattern>%d [%thread] %-5level %logger{15} - %msg%n</pattern>
     </encoder>
   </appender>
-  <root level="DEBUG">
+  <logger name="com.example" level="DEBUG"/>
+  <root level="INFO">
     <appender-ref ref="MAIN"/>
   </root>
 </configuration>

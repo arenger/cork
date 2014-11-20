@@ -6,8 +6,7 @@ import javax.servlet.ServletContextEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.example.dal.DalException;
-import com.example.dal.DefaultSource;
+import com.example.dal.Manager;
 
 public class Initializer implements ServletContextListener {
 
@@ -16,14 +15,12 @@ public class Initializer implements ServletContextListener {
 
    @Override
    public void contextInitialized(ServletContextEvent event) {
-      try {
-         DefaultSource.init();
-         LOG.info("Default DataSource initialized.");
-      } catch (DalException e) {
-         LOG.error("Problem initializing default DataSource", e);
-      }
+      Manager.init();
+      LOG.debug("dal.Manager initialized.");
    }
 
    @Override
-   public void contextDestroyed(ServletContextEvent event) {}
+   public void contextDestroyed(ServletContextEvent event) {
+      Manager.shutdown();
+   }
 }

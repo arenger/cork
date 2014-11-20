@@ -49,11 +49,10 @@ public class MessageService {
 
    @GET
    @Path("getFrom/{personId}")
-   @Consumes("text/plain")
    public List<Message> getFrom(@PathParam("personId") int personId) {
       List<Message> ret = new ArrayList<Message>();
       try {
-         ret.addAll(messageKeeper.getMessagesFrom(personId));
+         ret = messageKeeper.getMessagesFrom(personId);
       } catch (DalException e) {
          LOG.error("Problem getting messages from {}", personId, e);
       }
@@ -62,11 +61,10 @@ public class MessageService {
 
    @GET
    @Path("getTo/{personId}")
-   @Consumes("text/plain")
    public List<Message> getTo(@PathParam("personId") int personId) {
       List<Message> ret = new ArrayList<Message>();
       try {
-         ret.addAll(messageKeeper.getMessagesTo(personId));
+         ret = messageKeeper.getMessagesTo(personId);
       } catch (DalException e) {
          LOG.error("Problem getting messages from {}", personId, e);
       }
@@ -75,13 +73,11 @@ public class MessageService {
 
    @GET
    @Path("md5/sentFrom/{personId}")
-   @Consumes("text/plain")
    public String md5from(@PathParam("personId") int personId) {
       String md5 = null;
       try {
          Digester d = new Digester();
-         List<Message> ml = new ArrayList<Message>();
-         ml.addAll(messageKeeper.getMessagesFrom(personId));
+         List<Message> ml = messageKeeper.getMessagesFrom(personId);
          Collections.sort(ml);
          md5 = d.md5(ml) + "\n";
       } catch (DalException e) {

@@ -1,7 +1,7 @@
 package com.example.rest;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -18,11 +18,11 @@ public class MessageServiceTest {
    @Test
    public void testMd5from() throws DalException {
       MessageKeeper mmk = mock(MessageKeeper.class);
-      Set<Message> set = new HashSet<Message>();
-      set.add(newMsgWithContent("s"));
-      set.add(newMsgWithContent("t"));
-      set.add(newMsgWithContent("p"));
-      when(mmk.getMessagesFrom(23)).thenReturn(set);
+      List<Message> list = new ArrayList<Message>();
+      list.add(newMsgWithContent("s"));
+      list.add(newMsgWithContent("t"));
+      list.add(newMsgWithContent("p"));
+      when(mmk.getMessagesFrom(23)).thenReturn(list);
       MessageService ms = new MessageService(mmk);
       Assert.assertEquals("67a063aecbd1fc4701ba184b92f695b0\n",
          ms.md5from(23));
